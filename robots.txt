@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /editeur.html
+
+# Sitemap officiel du site
+Sitemap: https://benamoura.github.io/sitemap.xml

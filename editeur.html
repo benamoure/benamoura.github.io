@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Éditeur Blogger Complet</title>
+    <!-- FontAwesome pour les icônes professionnelles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Police Inter pour une lisibilité parfaite -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #ffffff;
+            --bg-surface: #f8f9fa;
+            --border-color: #e5e7eb;
+            --accent-color: #ff5722;
+            --accent-hover: #f4511e;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --code-bg: #000000;
+            --code-text: #ffffff;
+            --status-live: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* En-tête fixe avec gestion responsive améliorée */
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .header-title i {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .inputs select, 
+        .inputs input[type="text"] {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            height: 36px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .inputs select:focus, 
+        .inputs input[type="text"]:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.15);
+        }
+
+        #typeSelect {
+            font-weight: 600;
+            min-width: 95px;
+        }
+
+        #seriesSelect {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        #episodeSelect {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        #articleTitle {
+            flex: 2;
+            min-width: 160px;
+        }
+
+        /* Toggle Publier / Direct vs Brouillon */
+        .publish-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            height: 36px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            color: var(--text-muted);
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .publish-toggle-btn.published {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: var(--status-live);
+            color: #047857;
+        }
+
+        .publish-toggle-btn.published .dot {
+            background-color: var(--status-live);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+        }
+
+        .publish-toggle-btn.draft {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+            color: #4b5563;
+        }
+
+        .publish-toggle-btn.draft .dot {
+            background-color: #9ca3af;
+        }
+
+        .publish-toggle-btn .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        /* Boutons d'en-tête */
+        .btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 7px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 36px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            min-width: 220px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.show {
+            display: flex;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.15s;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-surface);
+            color: var(--accent-color);
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Barre d'outils avancée Blogger */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 16px;
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            align-items: center;
+            transition: opacity 0.2s ease;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .toolbar.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .toolbar select, .toolbar button, .toolbar label.tool-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+        }
+
+        .toolbar select:hover, .toolbar button:hover, .toolbar label.tool-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .toolbar select {
+            padding-right: 18px;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 22px;
+            background-color: var(--border-color);
+            margin: 0 3px;
+        }
+
+        .tool-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+        }
+
+        .color-picker-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .color-picker-wrapper input[type="color"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            left: 0;
+            top: 0;
+        }
+
+        /* Zone d'édition flexible */
+        .editor-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: var(--bg-main);
+        }
+
+        #visualEditor {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            outline: none;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            word-break: break-word;
+            background-color: #ffffff;
+        }
+
+        #visualEditor img.featured-top-img {
+            max-width: 100%;
+            max-height: 420px;
+            display: block;
+            margin: 0 auto 16px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            object-fit: cover;
+        }
+
+        #visualEditor p {
+            margin-bottom: 1em;
+        }
+
+        #visualEditor h1 {
+            font-size: 1.8rem;
+            margin-top: 1.2em;
+            margin-bottom: 0.6em;
+            color: #111827;
+        }
+
+        #visualEditor h2 {
+            font-size: 1.5rem;
+            margin-top: 1.2em;
+            margin-bottom: 0.6em;
+            color: #111827;
+        }
+
+        #visualEditor h3 {
+            font-size: 1.25rem;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #111827;
+        }
+
+        #visualEditor blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 16px;
+            margin: 1em 0;
+            color: var(--text-muted);
+            font-style: italic;
+            background: rgba(255, 87, 34, 0.05);
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        #visualEditor ul, #visualEditor ol {
+            margin-left: 24px;
+            margin-bottom: 1em;
+        }
+
+        #visualEditor a {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        #visualEditor img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        #visualEditor hr {
+            border: none;
+            border-top: 2px dashed var(--accent-color);
+            margin: 20px 0;
+        }
+
+        #codeEditor {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            padding: 24px;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border: none;
+            outline: none;
+            resize: none;
+            display: none;
+            box-sizing: border-box;
+        }
+
+        /* Pied de page */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .stats-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            header { padding: 10px 12px; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .inputs { width: 100%; min-width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .header-title span { display: none; }
+            .toolbar { padding: 8px 10px; gap: 4px; }
+            #visualEditor, #codeEditor { padding: 16px; }
+            .inputs select, .inputs input[type="text"] { flex: 1 1 100%; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- En-tête fixe -->
+        <header>
+            <div class="header-title">
+                <i class="fa-solid fa-blog"></i>
+                <span>Editeur Benamoura</span>
+            </div>
+            <div class="header-actions">
+                <div class="inputs">
+                    <!-- Type de contenu -->
+                    <select id="typeSelect">
+                        <option value="serie">Série</option>
+                        <option value="episode">Épisode</option>
+                    </select>
+
+                    <!-- Liste des Séries -->
+                    <select id="seriesSelect">
+                        <option value="">Chargement des séries...</option>
+                    </select>
+
+                    <!-- Liste des Épisodes -->
+                    <select id="episodeSelect" disabled>
+                        <option value="">Non applicable (Mode Série)</option>
+                    </select>
+
+                    <input type="text" id="articleTitle" placeholder="Titre de l'article / épisode">
+                </div>
+
+                <!-- Bouton Toggle Publier en direct / Brouillon -->
+                <div class="publish-toggle-btn published" id="publishToggleBtn" title="Cliquer pour basculer : En direct ou Brouillon">
+                    <span class="dot"></span>
+                    <span id="publishStatusText">En direct</span>
+                </div>
+
+                <!-- Bouton Sauvegarde / Mise à jour Google Sheets -->
+                <button id="saveToSheetBtn" class="btn btn-primary" title="Envoyer vers Google Sheets">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> <span id="saveBtnText">Sauvegarder</span>
+                </button>
+
+                <button id="toggleModeBtn" class="btn" title="Basculer entre Mode Visuel et Code Source">
+                    <i class="fa-solid fa-code"></i> <span id="modeBtnText">Mode Code</span>
+                </button>
+                
+                <div class="dropdown" id="copyDropdownContainer">
+                    <button id="copyMenuBtn" class="btn">
+                        <i class="fa-solid fa-copy"></i> Exporter <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </button>
+                    <div class="dropdown-menu" id="copyDropdownMenu">
+                        <button class="dropdown-item" data-export="blogger"><i class="fa-brands fa-html5" style="color: #ff5722;"></i> HTML Blogger</button>
+                        <button class="dropdown-item" data-export="facebook"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Format Facebook</button>
+                        <button class="dropdown-item" data-export="whatsapp"><i class="fa-brands fa-whatsapp" style="color: #25d366;"></i> Format WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Barre d'outils complète Blogger -->
+        <div class="toolbar" id="formattingToolbar">
+            <button class="tool-btn" data-command="undo" title="Annuler (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="tool-btn" data-command="redo" title="Rétablir (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+            
+            <div class="toolbar-divider"></div>
+
+            <select id="fontNameSelect" title="Police de caractères">
+                <option value="Inter">Inter (Défaut)</option>
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Impact">Impact</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+
+            <select id="fontSizeSelect" title="Taille du texte">
+                <option value="1">Très petite</option>
+                <option value="2">Petite</option>
+                <option value="3" selected>Normale</option>
+                <option value="4">Moyenne</option>
+                <option value="5">Grande</option>
+                <option value="6">Très grande</option>
+            </select>
+
+            <select id="formatBlockSelect" title="Style de paragraphe">
+                <option value="p">Paragraphe</option>
+                <option value="h1">Titre principal (H1)</option>
+                <option value="h2">Titre (H2)</option>
+                <option value="h3">Sous-titre (H3)</option>
+            </select>
+
+            <div class="toolbar-divider"></div>
+
+            <button class="tool-btn" data-command="bold" title="Gras (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+            <button class="tool-btn" data-command="italic" title="Italique (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+            <button class="tool-btn" data-command="underline" title="Souligné (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+            <button class="tool-btn" data-command="strikeThrough" title="Biffé / Barré"><i class="fa-solid fa-strikethrough"></i></button>
+
+            <div class="color-picker-wrapper tool-btn" title="Couleur du texte">
+                <i class="fa-solid fa-font"></i>
+                <input type="color" id="textColorPicker" value="#1f2937">
+            </div>
+            <div class="color-picker-wrapper tool-btn" title="Couleur d'arrière-plan (Surlignage)">
+                <i class="fa-solid fa-highlighter"></i>
+                <input type="color" id="bgColorPicker" value="#ff5722">
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <button class="tool-btn" id="createLinkBtn" title="Ajouter un lien"><i class="fa-solid fa-link"></i></button>
+            <button class="tool-btn" data-command="unlink" title="Supprimer le lien"><i class="fa-solid fa-unlink"></i></button>
+            
+            <button class="tool-btn" id="insertImageUrlBtn" title="Insérer une image par URL"><i class="fa-solid fa-image"></i></button>
+            <label class="tool-btn" title="Téléverser l'image principale (placée en haut de l'article)">
+                <i class="fa-solid fa-upload"></i>
+                <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+            </label>
+            <button class="tool-btn" id="insertVideoBtn" title="Insérer une vidéo (YouTube / Iframe)"><i class="fa-solid fa-video"></i></button>
+
+            <div class="toolbar-divider"></div>
+
+            <button class="tool-btn" data-command="insertUnorderedList" title="Liste à puces"><i class="fa-solid fa-list-ul"></i></button>
+            <button class="tool-btn" data-command="insertNumberedList" title="Liste numérotée"><i class="fa-solid fa-list-ol"></i></button>
+            <button class="tool-btn" data-command="justifyLeft" title="Aligner à gauche"><i class="fa-solid fa-align-left"></i></button>
+            <button class="tool-btn" data-command="justifyCenter" title="Centrer"><i class="fa-solid fa-align-center"></i></button>
+            <button class="tool-btn" data-command="justifyRight" title="Aligner à droite"><i class="fa-solid fa-align-right"></i></button>
+            <button class="tool-btn" data-command="justifyFull" title="Justifier"><i class="fa-solid fa-align-justify"></i></button>
+
+            <div class="toolbar-divider"></div>
+
+            <button class="tool-btn" id="insertBlockquoteBtn" title="Citation (Blockquote)"><i class="fa-solid fa-quote-left"></i></button>
+            <button class="tool-btn" id="insertReadMoreBtn" title="Insérer un saut de page"><i class="fa-solid fa-scissors"></i></button>
+            <button class="tool-btn" data-command="outdent" title="Diminuer le retrait"><i class="fa-solid fa-outdent"></i></button>
+            <button class="tool-btn" data-command="indent" title="Augmenter le retrait"><i class="fa-solid fa-indent"></i></button>
+
+            <div class="toolbar-divider"></div>
+
+            <button class="tool-btn" id="dirLtrBtn" title="Gauche à droite (LTR)"><i class="fa-solid fa-paragraph"></i> LTR</button>
+            <button class="tool-btn" id="dirRtlBtn" title="Droite à gauche (RTL)"><i class="fa-solid fa-paragraph"></i> RTL</button>
+            <button class="tool-btn" data-command="removeFormat" title="Effacer tout le formatage"><i class="fa-solid fa-eraser"></i></button>
+        </div>
+
+        <!-- Zone d'édition flexible -->
+        <div class="editor-container">
+            <div id="visualEditor" contenteditable="true" placeholder="Commencez à rédiger votre article ici..."></div>
+            <textarea id="codeEditor" spellcheck="false" placeholder="Le code HTML brut apparaîtra ici..."></textarea>
+        </div>
+
+        <!-- Pied de page -->
+        <footer>
+            <div class="stats-group">
+                <span id="wordCount">Mots : 0</span>
+                <span id="charCount">Caractères : 0</span>
+            </div>
+            <div id="statusBadge">Blogger Content Suite v2.0 (Fond Blanc)</div>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Action effectuée avec succès !</div>
+
+    <!-- Script synchronisé -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB59BOGny0ZCcDT5oNz7zSjk5HygOLat1Xyc-oIi_HdTaLO4BR8cM1oqdehJ7h_YFlMA/exec";
+
+        // Éléments UI principaux
+        const visualEditor = document.getElementById('visualEditor');
+        const codeEditor = document.getElementById('codeEditor');
+        const toggleModeBtn = document.getElementById('toggleModeBtn');
+        const modeBtnText = document.getElementById('modeBtnText');
+        const formattingToolbar = document.getElementById('formattingToolbar');
+        const copyMenuBtn = document.getElementById('copyMenuBtn');
+        const copyDropdownMenu = document.getElementById('copyDropdownMenu');
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const toast = document.getElementById('toast');
+        const statusBadge = document.getElementById('statusBadge');
+
+        // Éléments de formulaire Google Sheet
+        const typeSelect = document.getElementById('typeSelect');
+        const seriesSelect = document.getElementById('seriesSelect');
+        const episodeSelect = document.getElementById('episodeSelect');
+        const articleTitle = document.getElementById('articleTitle');
+        const saveToSheetBtn = document.getElementById('saveToSheetBtn');
+        const saveBtnText = document.getElementById('saveBtnText');
+        const publishToggleBtn = document.getElementById('publishToggleBtn');
+        const publishStatusText = document.getElementById('publishStatusText');
+
+        // Contrôles
+        const formatBlockSelect = document.getElementById('formatBlockSelect');
+        const fontNameSelect = document.getElementById('fontNameSelect');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const textColorPicker = document.getElementById('textColorPicker');
+        const bgColorPicker = document.getElementById('bgColorPicker');
+        const createLinkBtn = document.getElementById('createLinkBtn');
+        const insertImageUrlBtn = document.getElementById('insertImageUrlBtn');
+        const imageFileInput = document.getElementById('imageFileInput');
+        const insertVideoBtn = document.getElementById('insertVideoBtn');
+        const insertBlockquoteBtn = document.getElementById('insertBlockquoteBtn');
+        const insertReadMoreBtn = document.getElementById('insertReadMoreBtn');
+        const dirLtrBtn = document.getElementById('dirLtrBtn');
+        const dirRtlBtn = document.getElementById('dirRtlBtn');
+
+        let isCodeMode = false;
+        let currentRecordId = null;
+        let latestUploadedImage = "";
+        let isPublished = true;
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function setPublishState(state) {
+            isPublished = Boolean(state);
+            if (isPublished) {
+                publishToggleBtn.classList.remove('draft');
+                publishToggleBtn.classList.add('published');
+                publishStatusText.textContent = "En direct";
+            } else {
+                publishToggleBtn.classList.remove('published');
+                publishToggleBtn.classList.add('draft');
+                publishStatusText.textContent = "Brouillon";
+            }
+        }
+
+        publishToggleBtn.addEventListener('click', () => {
+            setPublishState(!isPublished);
+            showToast(isPublished ? "Statut : Prêt à publier en direct" : "Statut : Mode Brouillon");
+        });
+
+        function updateStats() {
+            const text = visualEditor.innerText || '';
+            const characters = text.length;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            wordCountEl.textContent = `Mots : ${words}`;
+            charCountEl.textContent = `Caractères : ${characters}`;
+        }
+
+        function syncEditor() {
+            visualEditor.focus();
+            codeEditor.value = visualEditor.innerHTML;
+            updateStats();
+        }
+
+        visualEditor.addEventListener('input', () => {
+            codeEditor.value = visualEditor.innerHTML;
+            updateStats();
+        });
+
+        codeEditor.addEventListener('input', () => {
+            visualEditor.innerHTML = codeEditor.value;
+            updateStats();
+        });
+
+        toggleModeBtn.addEventListener('click', () => {
+            isCodeMode = !isCodeMode;
+            if (isCodeMode) {
+                codeEditor.value = visualEditor.innerHTML;
+                visualEditor.style.display = 'none';
+                codeEditor.style.display = 'block';
+                formattingToolbar.classList.add('disabled');
+                modeBtnText.textContent = 'Mode Visuel';
+                toggleModeBtn.innerHTML = '<i class="fa-solid fa-eye"></i> <span id="modeBtnText">Mode Visuel</span>';
+                codeEditor.focus();
+            } else {
+                visualEditor.innerHTML = codeEditor.value;
+                codeEditor.style.display = 'none';
+                visualEditor.style.display = 'block';
+                formattingToolbar.classList.remove('disabled');
+                modeBtnText.textContent = 'Mode Code';
+                toggleModeBtn.innerHTML = '<i class="fa-solid fa-code"></i> <span id="modeBtnText">Mode Code</span>';
+                visualEditor.focus();
+            }
+        });
+
+        // TÉLÉVERSEMENT DE L'IMAGE
+        imageFileInput.addEventListener('change', (e) => {
+            if (isCodeMode) return;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDimension = 900;
+
+                    if (width > maxDimension) {
+                        height = Math.round((height * maxDimension) / width);
+                        width = maxDimension;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    latestUploadedImage = compressedBase64;
+
+                    const previousTopImg = visualEditor.querySelector('img.featured-top-img');
+                    if (previousTopImg) previousTopImg.remove();
+
+                    const imageHtml = `<p><img src="${compressedBase64}" class="featured-top-img" alt="Image Principale"></p>`;
+                    visualEditor.insertAdjacentHTML('afterbegin', imageHtml);
+                    
+                    codeEditor.value = visualEditor.innerHTML;
+                    updateStats();
+                    showToast("📸 Image ajoutée tout en haut de l'article !");
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // CHARGEMENT DES SÉRIES
+        async function loadSeries() {
+            try {
+                seriesSelect.innerHTML = '<option value="">Chargement des séries...</option>';
+                const res = await fetch(`${SCRIPT_URL}?action=getSeries`);
+                const json = await res.json();
+
+                if (json.status === 'success') {
+                    seriesSelect.innerHTML = '<option value="">-- Choisir une série --</option><option value="new">+ Créer une nouvelle série</option>';
+                    json.data.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s.id;
+                        opt.textContent = s.titre;
+                        opt.dataset.content = s.contenu || '';
+                        opt.dataset.image = s.image || '';
+                        opt.dataset.statut = s.statut || 'Publié';
+                        seriesSelect.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                seriesSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+            }
+        }
+
+        // CHARGEMENT DES ÉPISODES
+        async function loadEpisodes(seriesId) {
+            if (!seriesId || seriesId === 'new') {
+                episodeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une série</option>';
+                episodeSelect.disabled = true;
+                return;
+            }
+
+            try {
+                episodeSelect.disabled = false;
+                episodeSelect.innerHTML = '<option value="">Chargement des épisodes...</option>';
+                const res = await fetch(`${SCRIPT_URL}?action=getEpisodes&seriesId=${encodeURIComponent(seriesId)}`);
+                const json = await res.json();
+
+                if (json.status === 'success') {
+                    episodeSelect.innerHTML = '<option value="new">+ Nouvel épisode</option>';
+                    json.data.forEach(ep => {
+                        const opt = document.createElement('option');
+                        opt.value = ep.id;
+                        opt.textContent = ep.titre;
+                        opt.dataset.content = ep.contenu || '';
+                        opt.dataset.image = ep.image || '';
+                        opt.dataset.statut = ep.statut || 'Publié';
+                        episodeSelect.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                episodeSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+            }
+        }
+
+        typeSelect.addEventListener('change', () => {
+            currentRecordId = null;
+            if (typeSelect.value === 'serie') {
+                episodeSelect.disabled = true;
+                episodeSelect.innerHTML = '<option value="">Non applicable (Mode Série)</option>';
+                articleTitle.placeholder = "Titre de la nouvelle Série";
+                saveBtnText.textContent = "Sauvegarder";
+            } else {
+                episodeSelect.disabled = false;
+                articleTitle.placeholder = "Titre de l'épisode";
+                saveBtnText.textContent = "Sauvegarder";
+                loadEpisodes(seriesSelect.value);
+            }
+        });
+
+        seriesSelect.addEventListener('change', () => {
+            const selectedOpt = seriesSelect.options[seriesSelect.selectedIndex];
+
+            if (typeSelect.value === 'serie') {
+                if (selectedOpt && selectedOpt.value && selectedOpt.value !== 'new') {
+                    currentRecordId = selectedOpt.value;
+                    articleTitle.value = selectedOpt.textContent;
+                    visualEditor.innerHTML = selectedOpt.dataset.content;
+                    codeEditor.value = selectedOpt.dataset.content;
+                    latestUploadedImage = selectedOpt.dataset.image;
+                    setPublishState(selectedOpt.dataset.statut !== 'Brouillon');
+                    saveBtnText.textContent = "Mettre à jour Série";
+                    saveToSheetBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> <span id="saveBtnText">Mettre à jour Série</span>';
+                    statusBadge.textContent = "Modification Série existante";
+                } else {
+                    currentRecordId = null;
+                    articleTitle.value = '';
+                    visualEditor.innerHTML = '';
+                    codeEditor.value = '';
+                    latestUploadedImage = '';
+                    setPublishState(true);
+                    saveBtnText.textContent = "Sauvegarder Série";
+                    saveToSheetBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> <span id="saveBtnText">Sauvegarder Série</span>';
+                    statusBadge.textContent = "Nouvelle Série";
+                }
+                updateStats();
+            } else {
+                loadEpisodes(seriesSelect.value);
+            }
+        });
+
+        episodeSelect.addEventListener('change', () => {
+            const selectedOpt = episodeSelect.options[episodeSelect.selectedIndex];
+
+            if (selectedOpt && selectedOpt.value !== 'new') {
+                currentRecordId = selectedOpt.value;
+                articleTitle.value = selectedOpt.textContent;
+                visualEditor.innerHTML = selectedOpt.dataset.content;
+                codeEditor.value = selectedOpt.dataset.content;
+                latestUploadedImage = selectedOpt.dataset.image;
+                setPublishState(selectedOpt.dataset.statut !== 'Brouillon');
+                saveBtnText.textContent = "Mettre à jour Épisode";
+                saveToSheetBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> <span id="saveBtnText">Mettre à jour Épisode</span>';
+                statusBadge.textContent = "Modification Épisode existant";
+            } else {
+                currentRecordId = null;
+                articleTitle.value = '';
+                visualEditor.innerHTML = '';
+                codeEditor.value = '';
+                latestUploadedImage = '';
+                setPublishState(true);
+                saveBtnText.textContent = "Sauvegarder Épisode";
+                saveToSheetBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> <span id="saveBtnText">Sauvegarder Épisode</span>';
+                statusBadge.textContent = "Nouvel Épisode";
+            }
+            updateStats();
+        });
+
+        // ENREGISTREMENT POST
+        saveToSheetBtn.addEventListener('click', async () => {
+            const type = typeSelect.value;
+            const titre = articleTitle.value.trim();
+            const contenu = isCodeMode ? codeEditor.value : visualEditor.innerHTML;
+            const seriesId = seriesSelect.value;
+
+            if (!titre) {
+                alert("Veuillez saisir un titre !");
+                articleTitle.focus();
+                return;
+            }
+
+            if (type === 'episode' && (!seriesId || seriesId === 'new')) {
+                alert("Veuillez sélectionner la série parente pour cet épisode.");
+                seriesSelect.focus();
+                return;
+            }
+
+            const currentBtnLabel = saveBtnText.textContent;
+            saveToSheetBtn.disabled = true;
+            saveToSheetBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sauvegarde en cours...';
+
+            const topImg = visualEditor.querySelector('img.featured-top-img');
+            const imageToSend = topImg ? topImg.src : latestUploadedImage;
+
+            const payload = {
+                type: type,
+                id: currentRecordId,
+                titre: titre,
+                contenu: contenu,
+                image: imageToSend,
+                seriesId: seriesId,
+                statut: isPublished ? "Publié" : "Brouillon"
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showToast("✅ " + result.message);
+                    
+                    // Si l'image a été téléversée sur Drive, mettre à jour la source dans l'éditeur
+                    if (result.imageUrl && topImg) {
+                        topImg.src = result.imageUrl;
+                        latestUploadedImage = result.imageUrl;
+                        codeEditor.value = visualEditor.innerHTML;
+                    }
+
+                    if (type === 'serie') {
+                        await loadSeries();
+                    } else {
+                        await loadEpisodes(seriesId);
+                    }
+                } else {
+                    showToast("❌ Erreur : " + result.message);
+                }
+            } catch (err) {
+                showToast("❌ Échec de communication avec Google Sheets");
+            } finally {
+                saveToSheetBtn.disabled = false;
+                saveToSheetBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> <span id="saveBtnText">${currentBtnLabel}</span>`;
+            }
+        });
+
+        // Barre d'outils
+        document.querySelectorAll('.toolbar .tool-btn[data-command]').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (isCodeMode) return;
+                document.execCommand(button.getAttribute('data-command'), false, null);
+                syncEditor();
+            });
+        });
+
+        fontNameSelect.addEventListener('change', () => {
+            if (isCodeMode) return;
+            document.execCommand('fontName', false, fontNameSelect.value);
+            syncEditor();
+        });
+
+        fontSizeSelect.addEventListener('change', () => {
+            if (isCodeMode) return;
+            document.execCommand('fontSize', false, fontSizeSelect.value);
+            syncEditor();
+        });
+
+        formatBlockSelect.addEventListener('change', () => {
+            if (isCodeMode) return;
+            document.execCommand('formatBlock', false, `<${formatBlockSelect.value}>`);
+            syncEditor();
+        });
+
+        textColorPicker.addEventListener('input', () => {
+            if (isCodeMode) return;
+            document.execCommand('foreColor', false, textColorPicker.value);
+            syncEditor();
+        });
+
+        bgColorPicker.addEventListener('input', () => {
+            if (isCodeMode) return;
+            document.execCommand('hiliteColor', false, bgColorPicker.value);
+            syncEditor();
+        });
+
+        createLinkBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCodeMode) return;
+            const url = prompt('Entrez l\'URL du lien :', 'https://');
+            if (url) {
+                document.execCommand('createLink', false, url);
+                syncEditor();
+            }
+        });
+
+        insertImageUrlBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCodeMode) return;
+            const url = prompt('Entrez l\'URL de l\'image :', 'https://');
+            if (url) {
+                document.execCommand('insertImage', false, url);
+                syncEditor();
+            }
+        });
+
+        insertVideoBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCodeMode) return;
+            let url = prompt('Entrez l\'URL YouTube ou le code Iframe :');
+            if (url) {
+                if (url.includes('youtube.com/watch?v=')) {
+                    const videoId = url.split('v=')[1].split('&')[0];
+                    url = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                } else if (url.includes('youtu.be/')) {
+                    const videoId = url.split('youtu.be/')[1].split('?')[0];
+                    url = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                }
+                document.execCommand('insertHTML', false, url);
+                syncEditor();
+            }
+        });
+
+        insertBlockquoteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCodeMode) return;
+            document.execCommand('formatBlock', false, 'blockquote');
+            syncEditor();
+        });
+
+        insertReadMoreBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isCodeMode) return;
+            document.execCommand('insertHTML', false, '<!--more--><hr id="read-more" title="Saut de page Blogger"><br>');
+            syncEditor();
+        });
+
+        dirLtrBtn.addEventListener('click', (e) => {
+            if (isCodeMode) return;
+            visualEditor.setAttribute('dir', 'ltr');
+        });
+
+        dirRtlBtn.addEventListener('click', (e) => {
+            if (isCodeMode) return;
+            visualEditor.setAttribute('dir', 'rtl');
+        });
+
+        copyMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            copyDropdownMenu.classList.toggle('show');
+        });
+
+        window.addEventListener('click', () => {
+            if (copyDropdownMenu.classList.contains('show')) {
+                copyDropdownMenu.classList.remove('show');
+            }
+        });
+
+        copyDropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+
+        document.querySelectorAll('.dropdown-item[data-export]').forEach(item => {
+            item.addEventListener('click', async () => {
+                const exportType = item.getAttribute('data-export');
+                copyDropdownMenu.classList.remove('show');
+
+                let finalContent = '';
+                const rawHTML = isCodeMode ? codeEditor.value : visualEditor.innerHTML;
+
+                if (exportType === 'blogger') {
+                    finalContent = rawHTML;
+                } else if (exportType === 'facebook') {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = rawHTML;
+                    const plainText = tempDiv.innerText || tempDiv.textContent || '';
+                    finalContent = plainText.trim() + '\n\n#Blogger #ContentMarketing\n@Blogger @Meta';
+                } else if (exportType === 'whatsapp') {
+                    finalContent = htmlToWhatsApp(rawHTML);
+                }
+
+                try {
+                    await navigator.clipboard.writeText(finalContent);
+                    showToast(`Export "${item.textContent.trim()}" copié !`);
+                } catch (err) {
+                    showToast('Erreur d\'accès au presse-papiers');
+                }
+            });
+        });
+
+        function htmlToWhatsApp(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+
+            function parseNode(node) {
+                if (node.nodeType === Node.TEXT_NODE) return node.nodeValue;
+                if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+                let innerText = Array.from(node.childNodes).map(parseNode).join('');
+
+                switch (node.tagName.toLowerCase()) {
+                    case 'b': case 'strong': return `*${innerText}*`;
+                    case 'i': case 'em': return `_${innerText}_`;
+                    case 's': case 'strike': case 'del': return `~${innerText}~`;
+                    case 'code': return `\`\`\`${innerText}\`\`\``;
+                    case 'h1': case 'h2': case 'h3': case 'h4': case 'h5': case 'h6':
+                        return `\n*${innerText}*\n`;
+                    case 'p': case 'div': return `${innerText}\n\n`;
+                    case 'br': return '\n';
+                    case 'li': return `• ${innerText}\n`;
+                    case 'ul': case 'ol': return `\n${innerText}\n`;
+                    case 'a': return `${innerText} (${node.href})`;
+                    case 'blockquote': return `> ${innerText}\n`;
+                    default: return innerText;
+                }
+            }
+
+            let result = Array.from(div.childNodes).map(parseNode).join('');
+            return result.replace(/\n{3,}/g, '\n\n').trim() + '\n\n#Blogger #ContentMarketing\n@Blogger @Meta';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            loadSeries();
+        });
+    </script>
+</body>
+</html>
