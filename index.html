@@ -53,7 +53,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Reset & Variables Android (Material Design) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -77,7 +76,6 @@
             --footer-height: 60px;
         }
 
-        /* --- Structure Écran & Limite 50% sur PC --- */
         html {
             width: 100%;
             height: 100%;
@@ -98,7 +96,6 @@
             position: relative;
         }
 
-        /* APPLICATION DE LA CONTRAINTE 50% SUR PC */
         @media (min-width: 1024px) {
             body {
                 width: 50%;
@@ -109,7 +106,6 @@
             }
         }
 
-        /* --- Header : Top App Bar --- */
         .app-header {
             flex-shrink: 0;
             height: var(--header-height);
@@ -185,7 +181,6 @@
             flex-shrink: 0;
         }
 
-        /* --- Main : Scroll fluide --- */
         .app-content {
             flex: 1;
             overflow-y: auto;
@@ -199,7 +194,6 @@
             }
         }
 
-        /* --- Loader --- */
         .loader-container {
             display: flex;
             flex-direction: column;
@@ -224,7 +218,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* --- Vues --- */
         .view-section {
             display: none;
         }
@@ -233,7 +226,6 @@
             display: block;
         }
 
-        /* --- Espaces Publicitaires (Ads) --- */
         .ad-banner-slot {
             margin: 12px 0;
             background-color: #ffffff;
@@ -261,7 +253,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* --- Onglet Accueil --- */
         .home-container {
             display: flex;
             flex-direction: column;
@@ -375,7 +366,6 @@
             margin-bottom: 12px;
         }
 
-        /* --- Grille des Séries (Min 2 Colonnes) --- */
         .series-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -504,7 +494,6 @@
             font-weight: 600;
         }
 
-        /* --- Liste des Épisodes --- */
         .episodes-list {
             display: flex;
             flex-direction: column;
@@ -551,7 +540,6 @@
             text-overflow: ellipsis;
         }
 
-        /* --- Lecteur d'Épisode --- */
         .reader-container {
             background-color: var(--surface-color);
             padding: 16px;
@@ -611,7 +599,6 @@
             transform: scale(0.98);
         }
 
-        /* --- Commentaires --- */
         .comments-section {
             background-color: var(--surface-color);
             padding: 16px;
@@ -706,7 +693,6 @@
             line-height: 1.5;
         }
 
-        /* --- Footer & Nav Bar --- */
         .app-footer {
             flex-shrink: 0;
             height: var(--footer-height);
@@ -749,7 +735,6 @@
             color: var(--primary-color);
         }
 
-        /* BOUTON ÉDITEUR MASQUÉ PAR DÉFAUT (RÉSERVÉ AUX ADMINISTRATEURS) */
         #navEditor {
             display: none;
         }
@@ -757,7 +742,6 @@
 </head>
 <body>
 
-    <!-- Top App Bar -->
     <header class="app-header">
         <button id="backBtn" class="back-btn" title="Retour" aria-label="Retour">
             <i class="fa-solid fa-arrow-left"></i>
@@ -774,16 +758,13 @@
         </button>
     </header>
 
-    <!-- Zone scrollable principale -->
     <main class="app-content" id="appContentScroll">
 
-        <!-- 1. Indicateur de chargement -->
         <div id="loader" class="loader-container">
             <div class="spinner"></div>
             <span>Chargement des données...</span>
         </div>
 
-        <!-- 2. Vue : Accueil (Home) -->
         <section id="homeView" class="view-section">
             <div class="home-container">
                 <div class="home-hero">
@@ -797,7 +778,6 @@
                     </button>
                 </div>
 
-                <!-- ESPACE PUBLICITAIRE HAUT (Accueil) -->
                 <div class="ad-banner-slot">
                     <span class="ad-tag-label">Publicité</span>
                     <script type="text/javascript">
@@ -854,11 +834,9 @@
             </div>
         </section>
 
-        <!-- 3. Vue : Liste des Séries -->
         <section id="seriesView" class="view-section">
             <div id="seriesGrid" class="series-grid"></div>
 
-            <!-- ESPACE PUBLICITAIRE BAS (Catalogue) -->
             <div class="ad-banner-slot">
                 <span class="ad-tag-label">Publicité</span>
                 <script type="text/javascript">
@@ -874,17 +852,14 @@
             </div>
         </section>
 
-        <!-- 4. Vue : Liste des Épisodes -->
         <section id="episodesView" class="view-section">
             <div id="episodesList" class="episodes-list"></div>
         </section>
 
-        <!-- 5. Vue : Lecteur de contenu & Commentaires -->
         <section id="readerView" class="view-section">
             <article class="reader-container">
                 <h2 id="readerTitle" class="reader-title"></h2>
                 
-                <!-- ESPACE PUBLICITAIRE DANS LA LECTURE -->
                 <div class="ad-banner-slot">
                     <span class="ad-tag-label">Publicité</span>
                     <script type="text/javascript">
@@ -901,14 +876,12 @@
 
                 <div id="readerContent"></div>
 
-                <!-- Bouton Épisode Suivant -->
                 <div id="nextEpisodeContainer" class="next-episode-container" style="display: none;">
                     <button id="btnNextEpisode" class="btn-next-episode">
                         <span>Épisode suivant</span> <i class="fa-solid fa-forward-step"></i>
                     </button>
                 </div>
 
-                <!-- Barre d'interactions pour l'épisode -->
                 <div class="card-actions-bar" style="border-radius: 8px; margin-top: 16px;">
                     <div class="vote-group" id="episodeVoteGroup"></div>
                     <button class="btn-action" id="shareEpisodeBtn">
@@ -917,7 +890,6 @@
                 </div>
             </article>
 
-            <!-- ESPACE PUBLICITAIRE AVANT COMMENTAIRES -->
             <div class="ad-banner-slot">
                 <span class="ad-tag-label">Publicité</span>
                 <script type="text/javascript">
@@ -932,14 +904,12 @@
                 <script type="text/javascript" src="https://brijmohan.org/22/21a60a762f8cfad6108a5cccc6ce85e0"></script>
             </div>
 
-            <!-- Espace Commentaires de l'épisode -->
             <section class="comments-section">
                 <div class="comments-header-title">
                     <i class="fa-solid fa-comments"></i>
                     <span id="commentsCountLabel">Commentaires</span>
                 </div>
 
-                <!-- Formulaire d'ajout -->
                 <div class="comment-form">
                     <input type="text" id="commentPseudo" placeholder="Votre nom ou pseudo..." maxlength="40">
                     <textarea id="commentMsg" rows="3" placeholder="Écrire un commentaire..."></textarea>
@@ -948,7 +918,6 @@
                     </button>
                 </div>
 
-                <!-- Liste des commentaires -->
                 <div id="commentsListContainer" class="comments-list">
                     <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">Chargement des commentaires...</p>
                 </div>
@@ -957,7 +926,6 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar Android -->
     <footer class="app-footer">
         <nav class="bottom-nav">
             <button type="button" id="navHome" class="nav-item">
@@ -968,7 +936,6 @@
                 <i class="fa-solid fa-book-open"></i>
                 <span>Séries</span>
             </button>
-            <!-- Bouton Éditeur : Masqué par défaut et activé uniquement pour l'admin -->
             <a href="editeur.html" id="navEditor" class="nav-item">
                 <i class="fa-solid fa-pen-to-square"></i>
                 <span>Éditeur</span>
@@ -977,16 +944,10 @@
     </footer>
 
     <script>
-        // MOT DE PASSE POUR ACTIVER LE MODE ADMIN
         const ADMIN_PASSCODE = "admin123";
-
-        // LIEN OFFICIEL DE VOTRE CHAÎNE WHATSAPP
         const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029Vb6gBha8F2pDLuILTH1o";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYdcfGs6L5sicSO7N9TMhua2kzMZcL0vb_4pGmzsauTpuM_MKiz4iZDTWwum6_xc3bHw/exec";
 
-        // URL de votre API Google Apps Script
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5WxDWJ0e66pk_ffxYvCjAMVtBR3wWtGVoAJUIGmOaE3Ia8NLLcUr7W7IHkV73dT7BOQ/exec";
-
-        // Éléments du DOM
         const headerTitle = document.getElementById('headerTitle');
         const backBtn = document.getElementById('backBtn');
         const refreshBtn = document.getElementById('refreshBtn');
@@ -1013,14 +974,12 @@
         const nextEpisodeContainer = document.getElementById('nextEpisodeContainer');
         const btnNextEpisode = document.getElementById('btnNextEpisode');
 
-        // Commentaires
         const commentsListContainer = document.getElementById('commentsListContainer');
         const commentsCountLabel = document.getElementById('commentsCountLabel');
         const commentPseudo = document.getElementById('commentPseudo');
         const commentMsg = document.getElementById('commentMsg');
         const btnSendComment = document.getElementById('btnSendComment');
 
-        // Variables de navigation & mémoire des listes
         let currentView = 'series';
         let currentSeries = null;
         let currentEpisode = null;
@@ -1028,8 +987,68 @@
         let allCurrentEpisodes = [];
 
         /* ========================================================
-           GESTION CONNEXION ADMINISTRATEUR (POUR AFFICHER L'ÉDITEUR)
+           MODULE DE STATISTIQUES & TRACKING EN TEMPS RÉEL
            ======================================================== */
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+                return 'Tablette';
+            }
+            if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(ua)) {
+                return 'Mobile';
+            }
+            return 'Ordinateur (PC)';
+        }
+
+        function getOS() {
+            const ua = navigator.userAgent;
+            if (ua.indexOf("Win") !== -1) return "Windows";
+            if (ua.indexOf("Android") !== -1) return "Android";
+            if (ua.indexOf("iPhone") !== -1 || ua.indexOf("iPad") !== -1) return "iOS";
+            if (ua.indexOf("Mac") !== -1) return "MacOS";
+            if (ua.indexOf("Linux") !== -1) return "Linux";
+            return "Autre";
+        }
+
+        function getBrowser() {
+            const ua = navigator.userAgent;
+            if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1) return "Chrome";
+            if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) return "Safari";
+            if (ua.indexOf("Firefox") !== -1) return "Firefox";
+            if (ua.indexOf("Edg") !== -1) return "Edge";
+            return "Autre";
+        }
+
+        function getVisitorId() {
+            let vid = localStorage.getItem('benamoura_vid');
+            if (!vid) {
+                vid = 'USER_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+                localStorage.setItem('benamoura_vid', vid);
+            }
+            return vid;
+        }
+
+        function trackAnalytics(eventType, targetTitle = '', targetId = '') {
+            try {
+                const payload = {
+                    type: 'analytics',
+                    visitorId: getVisitorId(),
+                    eventType: eventType,
+                    targetTitle: targetTitle,
+                    targetId: targetId,
+                    device: getDeviceType(),
+                    os: getOS(),
+                    browser: getBrowser()
+                };
+
+                // Envoi discret en arrière-plan sans ralentir l'interface
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                }).catch(() => {});
+            } catch (e) {}
+        }
+
         function checkAdminStatus() {
             const isAdmin = localStorage.getItem('benamoura_is_admin') === 'true';
             if (isAdmin && navEditor) {
@@ -1039,7 +1058,6 @@
             }
         }
 
-        // Accès admin secret : 3 clics rapides sur le titre "Benamoura"
         let titleClickCount = 0;
         let titleClickTimer = null;
         headerTitle.addEventListener('click', () => {
@@ -1078,7 +1096,6 @@
             return (tmp.textContent || tmp.innerText || "").trim() || "Aucune description disponible...";
         }
 
-        // Création des URLs de partage direct
         function getDirectSeriesUrl(seriesId) {
             const baseUrl = window.location.origin + window.location.pathname;
             return `${baseUrl}?serie=${encodeURIComponent(seriesId)}`;
@@ -1112,12 +1129,14 @@
                 homeView.classList.add('active');
                 navHome.classList.add('active');
                 updateBrowserUrl('');
+                trackAnalytics('Onglet_Visite', 'Accueil');
             } else if (viewName === 'series') {
                 headerTitle.textContent = "Benamoura";
                 backBtn.style.display = 'none';
                 seriesView.classList.add('active');
                 navSeries.classList.add('active');
                 updateBrowserUrl('');
+                trackAnalytics('Onglet_Visite', 'Séries');
             } else if (viewName === 'episodes') {
                 headerTitle.textContent = currentSeries ? currentSeries.titre : "Épisodes";
                 backBtn.style.display = 'flex';
@@ -1125,6 +1144,7 @@
                 navSeries.classList.add('active');
                 if (currentSeries) {
                     updateBrowserUrl(`serie=${encodeURIComponent(currentSeries.id)}`);
+                    trackAnalytics('Lecture_Serie', currentSeries.titre, currentSeries.id);
                 }
             } else if (viewName === 'reader') {
                 backBtn.style.display = 'flex';
@@ -1132,12 +1152,12 @@
                 navSeries.classList.add('active');
                 if (currentSeries && currentEpisode) {
                     updateBrowserUrl(`serie=${encodeURIComponent(currentSeries.id)}&episode=${encodeURIComponent(currentEpisode.id)}`);
+                    trackAnalytics('Lecture_Episode', (currentSeries.titre ? currentSeries.titre + ' - ' : '') + currentEpisode.titre, currentEpisode.id);
                 }
             }
             appContentScroll.scrollTop = 0;
         }
 
-        // --- GESTION DU VOTE LOCAL (1 SEUL PAR UTILISATEUR) ---
         function getUserLocalVote(targetId) {
             return localStorage.getItem(`voted_${targetId}`) || null;
         }
@@ -1150,7 +1170,6 @@
             }
         }
 
-        // Envoi de l'interaction vers Google Sheets
         async function sendInteractionToSheet(targetType, targetId, likeDelta, dislikeDelta, shareDelta) {
             try {
                 fetch(SCRIPT_URL, {
@@ -1169,7 +1188,6 @@
             }
         }
 
-        // 1. CHARGER TOUTES LES SÉRIES
         async function fetchSeries(initialTargetSeriesId = null, initialTargetEpisodeId = null) {
             loader.style.display = 'flex';
             seriesGrid.innerHTML = '';
@@ -1221,7 +1239,6 @@
                             </div>
                         `;
 
-                        // Ouverture
                         card.querySelectorAll('[data-action="open"]').forEach(el => {
                             el.addEventListener('click', () => {
                                 currentSeries = serie;
@@ -1234,7 +1251,6 @@
                         const likeCountEl = card.querySelector('.like-count');
                         const dislikeCountEl = card.querySelector('.dislike-count');
 
-                        // Like
                         likeBtn.addEventListener('click', (e) => {
                             e.stopPropagation();
                             let currentVote = getUserLocalVote(serie.id);
@@ -1261,7 +1277,6 @@
                             sendInteractionToSheet('serie', serie.id, lDelta, dDelta, 0);
                         });
 
-                        // Dislike
                         dislikeBtn.addEventListener('click', (e) => {
                             e.stopPropagation();
                             let currentVote = getUserLocalVote(serie.id);
@@ -1288,7 +1303,6 @@
                             sendInteractionToSheet('serie', serie.id, lDelta, dDelta, 0);
                         });
 
-                        // Partage direct
                         card.querySelector('[data-action="share"]').addEventListener('click', async (e) => {
                             e.stopPropagation();
                             sendInteractionToSheet('serie', serie.id, 0, 0, 1);
@@ -1334,7 +1348,6 @@
             }
         }
 
-        // Compte des épisodes
         async function loadSeriesEpisodeCount(seriesId) {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=getEpisodes&seriesId=${encodeURIComponent(seriesId)}`);
@@ -1350,7 +1363,6 @@
             }
         }
 
-        // 2. CHARGER LES ÉPISODES
         async function fetchEpisodes(seriesId, initialEpisodeId = null) {
             loader.style.display = 'flex';
             episodesList.innerHTML = '';
@@ -1406,17 +1418,27 @@
             }
         }
 
-        // 3. LECTEUR D'ÉPISODE & COMMENTAIRES
+        /* ========================================================
+           CORRECTION DU LECTEUR : ÉVITER L'IMAGE EN DOUBLE
+           ======================================================== */
         function openReader(episode) {
             currentEpisode = episode;
             headerTitle.textContent = episode.titre;
             readerTitle.textContent = episode.titre;
             
+            const rawContent = episode.contenu || "<p>Contenu vide.</p>";
             let contentHTML = "";
-            if (episode.image) {
+
+            // VÉRIFICATION ANTI-DOUBLON :
+            // Si le contenu HTML contient déjà une balise <img> ou contient l'URL de l'image, on n'ajoute pas l'image en haut !
+            const hasAlreadyImageInHtml = /<img\s+[^>]*src=/i.test(rawContent);
+            const containsSameImageUrl = episode.image && rawContent.indexOf(episode.image) !== -1;
+
+            if (episode.image && !hasAlreadyImageInHtml && !containsSameImageUrl) {
                 contentHTML += `<img src="${episode.image}" class="reader-img" alt="${episode.titre}">`;
             }
-            contentHTML += episode.contenu || "<p>Contenu vide.</p>";
+
+            contentHTML += rawContent;
             readerContent.innerHTML = contentHTML;
 
             checkNextEpisode(episode);
@@ -1508,13 +1530,11 @@
                 sendInteractionToSheet('episode', ep.id, lD, dD, 0);
             };
 
-            // Partage dynamique et excitant de l'épisode
             document.getElementById('shareEpisodeBtn').onclick = async () => {
                 sendInteractionToSheet('episode', ep.id, 0, 0, 1);
                 const sId = currentSeries ? currentSeries.id : '';
                 const directUrl = getDirectEpisodeUrl(sId, ep.id);
 
-                // Extraction d'une partie du texte pour donner envie
                 let rawText = stripHtmlToText(ep.contenu);
                 let excerpt = rawText;
                 if (excerpt.length > 200) {
@@ -1522,8 +1542,6 @@
                 }
 
                 const seriesTitlePart = currentSeries && currentSeries.titre ? `${currentSeries.titre} - ` : '';
-                
-                // Message captivant et optimisé pour WhatsApp & réseaux sociaux
                 const shareMessage = `🔥 *${seriesTitlePart}${ep.titre}*\n\n📖 *Extrait :*\n« ${excerpt} »\n\n😱 *Tu veux absolument découvrir la suite ? C'est tellement palpitant !*\n\n👉 *Lis l'épisode complet ici :*\n${directUrl}`;
 
                 if (navigator.share) {
@@ -1540,7 +1558,6 @@
             };
         }
 
-        // 4. CHARGER ET ENVOYER LES COMMENTAIRES
         async function fetchComments(episodeId) {
             commentsListContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">Chargement des commentaires...</p>';
             
@@ -1615,7 +1632,6 @@
             }
         });
 
-        // Navigation bas
         navHome.addEventListener('click', () => {
             switchView('home');
         });
@@ -1648,17 +1664,17 @@
             }
         });
 
-        // Lancement initial
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             
-            // Connexion rapide via URL (ex: index.html?admin=1)
             if (urlParams.get('admin') === '1') {
                 localStorage.setItem('benamoura_is_admin', 'true');
             }
 
-            // Vérifier et afficher le bouton Éditeur si admin
             checkAdminStatus();
+
+            // Tracking automatique de l'arrivée sur l'application
+            trackAnalytics('Visite_Site', 'Accueil');
 
             const targetSerieId = urlParams.get('serie');
             const targetEpisodeId = urlParams.get('episode');
