@@ -98,8 +98,8 @@
 
         @media (min-width: 1024px) {
             body {
-                width: 50%;
-                max-width: 50%;
+                width: 40%;
+                max-width: 40%;
                 box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
                 border-left: 1px solid rgba(255, 255, 255, 0.1);
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -946,7 +946,7 @@
     <script>
         const ADMIN_PASSCODE = "admin123";
         const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029Vb6gBha8F2pDLuILTH1o";
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYdcfGs6L5sicSO7N9TMhua2kzMZcL0vb_4pGmzsauTpuM_MKiz4iZDTWwum6_xc3bHw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVSnE-RQ5M4dtc8wtFNVMjQTnTKU4JFtldIAfUrIlcnLa40rEbotBonBy--ELzEYuhGA/exec";
 
         const headerTitle = document.getElementById('headerTitle');
         const backBtn = document.getElementById('backBtn');
@@ -987,8 +987,40 @@
         let allCurrentEpisodes = [];
 
         /* ========================================================
-           MODULE DE STATISTIQUES & TRACKING EN TEMPS RÉEL
+           MODULE DE GÉOLOCALISATION & STATISTIQUES EN TEMPS RÉEL
            ======================================================== */
+        let userCountry = "Inconnu";
+
+        async function detectUserCountry() {
+            const cachedCountry = localStorage.getItem('benamoura_user_country');
+            if (cachedCountry) {
+                userCountry = cachedCountry;
+                return userCountry;
+            }
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5 secondes max
+                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+                clearTimeout(timeoutId);
+                const data = await res.json();
+                if (data && data.country_name) {
+                    userCountry = data.country_name;
+                    localStorage.setItem('benamoura_user_country', userCountry);
+                    return userCountry;
+                }
+            } catch (e) {
+                // Secours basé sur le fuseau horaire de l'appareil
+                try {
+                    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    if (tz) {
+                        userCountry = tz.split('/')[0] || "Inconnu";
+                    }
+                } catch (err) {}
+            }
+            return userCountry;
+        }
+
         function getDeviceType() {
             const ua = navigator.userAgent;
             if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
@@ -1030,18 +1062,19 @@
 
         function trackAnalytics(eventType, targetTitle = '', targetId = '') {
             try {
+                const country = localStorage.getItem('benamoura_user_country') || userCountry;
                 const payload = {
                     type: 'analytics',
                     visitorId: getVisitorId(),
                     eventType: eventType,
                     targetTitle: targetTitle,
                     targetId: targetId,
+                    pays: country,
                     device: getDeviceType(),
                     os: getOS(),
                     browser: getBrowser()
                 };
 
-                // Envoi discret en arrière-plan sans ralentir l'interface
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -1418,9 +1451,6 @@
             }
         }
 
-        /* ========================================================
-           CORRECTION DU LECTEUR : ÉVITER L'IMAGE EN DOUBLE
-           ======================================================== */
         function openReader(episode) {
             currentEpisode = episode;
             headerTitle.textContent = episode.titre;
@@ -1429,8 +1459,6 @@
             const rawContent = episode.contenu || "<p>Contenu vide.</p>";
             let contentHTML = "";
 
-            // VÉRIFICATION ANTI-DOUBLON :
-            // Si le contenu HTML contient déjà une balise <img> ou contient l'URL de l'image, on n'ajoute pas l'image en haut !
             const hasAlreadyImageInHtml = /<img\s+[^>]*src=/i.test(rawContent);
             const containsSameImageUrl = episode.image && rawContent.indexOf(episode.image) !== -1;
 
@@ -1664,7 +1692,7 @@
             }
         });
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             
             if (urlParams.get('admin') === '1') {
@@ -1673,7 +1701,8 @@
 
             checkAdminStatus();
 
-            // Tracking automatique de l'arrivée sur l'application
+            // Détecte le pays en arrière-plan puis trace la visite
+            await detectUserCountry();
             trackAnalytics('Visite_Site', 'Accueil');
 
             const targetSerieId = urlParams.get('serie');
