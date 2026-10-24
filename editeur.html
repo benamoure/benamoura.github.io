@@ -203,6 +203,17 @@
             background-color: var(--accent-hover);
         }
 
+        .btn-stats-toggle {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            border-color: #cbd5e1;
+            font-weight: 600;
+        }
+        .btn-stats-toggle:hover {
+            background-color: #e2e8f0;
+            color: var(--accent-color);
+        }
+
         /* Dropdown */
         .dropdown {
             position: relative;
@@ -245,6 +256,207 @@
             color: var(--accent-color);
         }
 
+        /* ========================================================
+           NOUVELLE STRUCTURE DU CORPS : SIDEBAR GAUCHE + ÉDITEUR
+           ======================================================== */
+        .main-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Panneau Latéral Gauche des Statistiques */
+        .stats-sidebar {
+            width: 320px;
+            min-width: 320px;
+            max-width: 320px;
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 25;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        }
+
+        .stats-sidebar.collapsed {
+            margin-left: -320px;
+        }
+
+        .stats-sidebar-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+        }
+
+        .stats-sidebar-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        .stats-sidebar-title i {
+            color: var(--accent-color);
+        }
+
+        .stats-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .stats-btn-icon {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.2s;
+        }
+
+        .stats-btn-icon:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .stats-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Cartes d'indicateurs (KPIs) */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .kpi-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .kpi-card-header {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .kpi-card-val {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Sections d'analyse détaillée */
+        .stats-block {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .stats-block h4 {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-bar-item {
+            margin-bottom: 8px;
+        }
+
+        .stat-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.76rem;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .stat-bar-track {
+            height: 6px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Journal des activités récentes */
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            font-size: 0.74rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 8px;
+            background: #fafafa;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .activity-item-time {
+            color: var(--text-muted);
+            font-size: 0.68rem;
+        }
+
+        .activity-item-desc {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        /* Espace droit principal (Toolbar + Editeur) */
+        .editor-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
         /* Conteneur global de la Toolbar */
         .toolbar-wrapper {
             width: 100%;
@@ -256,10 +468,10 @@
             z-index: 15;
         }
 
-        /* Toolbar 50% sur PC */
+        /* Toolbar */
         .toolbar {
-            width: 50%;
-            max-width: 50%;
+            width: 80%;
+            max-width: 850px;
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
@@ -326,7 +538,7 @@
             top: 0;
         }
 
-        /* Zone d'édition PC (Centré à 50%) */
+        /* Zone d'édition PC */
         .editor-container {
             flex: 1;
             position: relative;
@@ -339,8 +551,8 @@
         }
 
         #visualEditor {
-            width: 50%;
-            max-width: 50%;
+            width: 80%;
+            max-width: 850px;
             min-height: 100%;
             padding: 36px 40px;
             outline: none;
@@ -356,8 +568,8 @@
         }
 
         #codeEditor {
-            width: 50%;
-            max-width: 50%;
+            width: 80%;
+            max-width: 850px;
             min-height: 100%;
             padding: 24px;
             background-color: var(--code-bg);
@@ -447,10 +659,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ========================================================
-           ADAPTATION ANDROID / MOBILE & TABLETTE (< 992px)
-           Totalement responsive, plein écran
-           ======================================================== */
+        /* Adaptation Responsive Mobile */
         @media (max-width: 992px) {
             header {
                 padding: 8px 12px;
@@ -481,7 +690,22 @@
                 flex: 1 1 100%;
             }
 
-            /* Toolbar en haut, 100% largeur avec défilement horizontal fluide */
+            /* Panneau Statistiques Flottant sur Mobile */
+            .stats-sidebar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 85%;
+                max-width: 320px;
+                box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+            }
+
+            .stats-sidebar.collapsed {
+                margin-left: 0;
+                transform: translateX(-100%);
+            }
+
             .toolbar-wrapper {
                 justify-content: flex-start;
             }
@@ -496,11 +720,6 @@
                 gap: 4px;
             }
 
-            .toolbar select, .toolbar button, .toolbar label.tool-btn {
-                flex-shrink: 0;
-            }
-
-            /* Éditeur occupe 100% de l'écran */
             .editor-container {
                 padding: 0;
                 background-color: #ffffff;
@@ -560,6 +779,11 @@
                     <span id="publishStatusText">En direct</span>
                 </div>
 
+                <!-- Bouton d'ouverture / fermeture du volet des statistiques -->
+                <button id="toggleStatsSidebarBtn" class="btn btn-stats-toggle" title="Afficher/Masquer les statistiques">
+                    <i class="fa-solid fa-chart-column"></i> <span>Statistiques</span>
+                </button>
+
                 <button id="saveToSheetBtn" class="btn btn-primary" title="Envoyer vers Google Sheets">
                     <i class="fa-solid fa-cloud-arrow-up"></i> <span id="saveBtnText">Sauvegarder</span>
                 </button>
@@ -581,97 +805,177 @@
             </div>
         </header>
 
-        <!-- Barre d'outils (50% centrée sur PC, 100% en haut sur Android) -->
-        <div class="toolbar-wrapper">
-            <div class="toolbar" id="formattingToolbar">
-                <button class="tool-btn" data-command="undo" title="Annuler (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="tool-btn" data-command="redo" title="Rétablir (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
-                
-                <div class="toolbar-divider"></div>
-
-                <select id="fontNameSelect" title="Police">
-                    <option value="Inter">Inter (Défaut)</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Courier New">Courier New</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Impact">Impact</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
-                    <option value="Verdana">Verdana</option>
-                </select>
-
-                <select id="fontSizeSelect" title="Taille">
-                    <option value="1">Très petite</option>
-                    <option value="2">Petite</option>
-                    <option value="3" selected>Normale</option>
-                    <option value="4">Moyenne</option>
-                    <option value="5">Grande</option>
-                    <option value="6">Très grande</option>
-                </select>
-
-                <select id="formatBlockSelect" title="Style de paragraphe">
-                    <option value="p">Paragraphe</option>
-                    <option value="h1">Titre principal (H1)</option>
-                    <option value="h2">Titre (H2)</option>
-                    <option value="h3">Sous-titre (H3)</option>
-                </select>
-
-                <div class="toolbar-divider"></div>
-
-                <button class="tool-btn" data-command="bold" title="Gras (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
-                <button class="tool-btn" data-command="italic" title="Italique (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
-                <button class="tool-btn" data-command="underline" title="Souligné (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
-                <button class="tool-btn" data-command="strikeThrough" title="Barré"><i class="fa-solid fa-strikethrough"></i></button>
-
-                <div class="color-picker-wrapper tool-btn" title="Couleur du texte">
-                    <i class="fa-solid fa-font"></i>
-                    <input type="color" id="textColorPicker" value="#1f2937">
-                </div>
-                <div class="color-picker-wrapper tool-btn" title="Couleur d'arrière-plan">
-                    <i class="fa-solid fa-highlighter"></i>
-                    <input type="color" id="bgColorPicker" value="#ffeb3b">
+        <!-- ESPACE DE TRAVAIL PRINCIPAL AVEC STATISTIQUES AU BORD GAUCHE -->
+        <div class="main-workspace">
+            
+            <!-- PANNEAU GAUCHE DE STATISTIQUES -->
+            <aside id="statsSidebar" class="stats-sidebar">
+                <div class="stats-sidebar-header">
+                    <div class="stats-sidebar-title">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Statistiques en Direct</span>
+                    </div>
+                    <div class="stats-actions">
+                        <button id="refreshStatsBtn" class="stats-btn-icon" title="Actualiser les stats">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                        <button id="closeStatsSidebarBtn" class="stats-btn-icon" title="Masquer le panneau">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="toolbar-divider"></div>
+                <div class="stats-content-scroll">
+                    <!-- Indicateurs Principaux (KPIs) -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <span class="kpi-card-header"><i class="fa-solid fa-eye"></i> Visites Totales</span>
+                            <span class="kpi-card-val" id="statTotalViews">0</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-card-header"><i class="fa-solid fa-thumbs-up"></i> Likes Globaux</span>
+                            <span class="kpi-card-val" id="statTotalLikes">0</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-card-header"><i class="fa-solid fa-film"></i> Séries / Éps</span>
+                            <span class="kpi-card-val" id="statTotalItems">0 / 0</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-card-header"><i class="fa-solid fa-user-group"></i> Profils Créés</span>
+                            <span class="kpi-card-val" id="statTotalProfiles">0</span>
+                        </div>
+                    </div>
 
-                <button class="tool-btn" id="createLinkBtn" title="Ajouter un lien"><i class="fa-solid fa-link"></i></button>
-                <button class="tool-btn" data-command="unlink" title="Supprimer le lien"><i class="fa-solid fa-unlink"></i></button>
+                    <!-- Contrôle des Pages et Tabs -->
+                    <div class="stats-block">
+                        <h4><span><i class="fa-solid fa-layer-group"></i> Pages & Onglets</span> <small id="statsPagesCount">0 vue</small></h4>
+                        <div id="statsPagesContainer">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Chargement...</div>
+                        </div>
+                    </div>
+
+                    <!-- Répartition par Appareil -->
+                    <div class="stats-block">
+                        <h4><span><i class="fa-solid fa-mobile-screen"></i> Appareils & OS</span></h4>
+                        <div id="statsDevicesContainer">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Chargement...</div>
+                        </div>
+                    </div>
+
+                    <!-- Top Pays -->
+                    <div class="stats-block">
+                        <h4><span><i class="fa-solid fa-earth-africa"></i> Pays des Visiteurs</span></h4>
+                        <div id="statsCountriesContainer">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Chargement...</div>
+                        </div>
+                    </div>
+
+                    <!-- Activités récentes -->
+                    <div class="stats-block">
+                        <h4><span><i class="fa-solid fa-clock-rotate-left"></i> Flux d'Activité Récente</span></h4>
+                        <div class="activity-feed" id="statsActivityFeed">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Aucune donnée</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ESPACE ÉDITEUR (TOOLBAR + EDITEUR DE TEXTE) -->
+            <div class="editor-workspace">
                 
-                <button class="tool-btn" id="insertImageUrlBtn" title="Image par URL"><i class="fa-solid fa-image"></i></button>
-                <label class="tool-btn" title="Téléverser l'image principale (placée en haut)">
-                    <i class="fa-solid fa-upload"></i>
-                    <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
-                </label>
-                <button class="tool-btn" id="insertVideoBtn" title="Insérer une vidéo"><i class="fa-solid fa-video"></i></button>
+                <!-- Barre d'outils -->
+                <div class="toolbar-wrapper">
+                    <div class="toolbar" id="formattingToolbar">
+                        <button class="tool-btn" data-command="undo" title="Annuler (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="tool-btn" data-command="redo" title="Rétablir (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+                        
+                        <div class="toolbar-divider"></div>
 
-                <div class="toolbar-divider"></div>
+                        <select id="fontNameSelect" title="Police">
+                            <option value="Inter">Inter (Défaut)</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Impact">Impact</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Trebuchet MS">Trebuchet MS</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
 
-                <button class="tool-btn" data-command="insertUnorderedList" title="Liste à puces"><i class="fa-solid fa-list-ul"></i></button>
-                <button class="tool-btn" data-command="insertNumberedList" title="Liste numérotée"><i class="fa-solid fa-list-ol"></i></button>
-                <button class="tool-btn" data-command="justifyLeft" title="Aligner à gauche"><i class="fa-solid fa-align-left"></i></button>
-                <button class="tool-btn" data-command="justifyCenter" title="Centrer"><i class="fa-solid fa-align-center"></i></button>
-                <button class="tool-btn" data-command="justifyRight" title="Aligner à droite"><i class="fa-solid fa-align-right"></i></button>
-                <button class="tool-btn" data-command="justifyFull" title="Justifier"><i class="fa-solid fa-align-justify"></i></button>
+                        <select id="fontSizeSelect" title="Taille">
+                            <option value="1">Très petite</option>
+                            <option value="2">Petite</option>
+                            <option value="3" selected>Normale</option>
+                            <option value="4">Moyenne</option>
+                            <option value="5">Grande</option>
+                            <option value="6">Très grande</option>
+                        </select>
 
-                <div class="toolbar-divider"></div>
+                        <select id="formatBlockSelect" title="Style de paragraphe">
+                            <option value="p">Paragraphe</option>
+                            <option value="h1">Titre principal (H1)</option>
+                            <option value="h2">Titre (H2)</option>
+                            <option value="h3">Sous-titre (H3)</option>
+                        </select>
 
-                <button class="tool-btn" id="insertBlockquoteBtn" title="Citation"><i class="fa-solid fa-quote-left"></i></button>
-                <button class="tool-btn" id="insertReadMoreBtn" title="Saut de page Blogger"><i class="fa-solid fa-scissors"></i></button>
-                <button class="tool-btn" data-command="outdent" title="Diminuer le retrait"><i class="fa-solid fa-outdent"></i></button>
-                <button class="tool-btn" data-command="indent" title="Augmenter le retrait"><i class="fa-solid fa-indent"></i></button>
+                        <div class="toolbar-divider"></div>
 
-                <div class="toolbar-divider"></div>
+                        <button class="tool-btn" data-command="bold" title="Gras (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+                        <button class="tool-btn" data-command="italic" title="Italique (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+                        <button class="tool-btn" data-command="underline" title="Souligné (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+                        <button class="tool-btn" data-command="strikeThrough" title="Barré"><i class="fa-solid fa-strikethrough"></i></button>
 
-                <button class="tool-btn" id="dirLtrBtn" title="De gauche à droite (LTR)"><i class="fa-solid fa-paragraph"></i> L</button>
-                <button class="tool-btn" id="dirRtlBtn" title="De droite à gauche (RTL)"><i class="fa-solid fa-paragraph"></i> R</button>
-                <button class="tool-btn" data-command="removeFormat" title="Effacer le formatage"><i class="fa-solid fa-eraser"></i></button>
+                        <div class="color-picker-wrapper tool-btn" title="Couleur du texte">
+                            <i class="fa-solid fa-font"></i>
+                            <input type="color" id="textColorPicker" value="#1f2937">
+                        </div>
+                        <div class="color-picker-wrapper tool-btn" title="Couleur d'arrière-plan">
+                            <i class="fa-solid fa-highlighter"></i>
+                            <input type="color" id="bgColorPicker" value="#ffeb3b">
+                        </div>
+
+                        <div class="toolbar-divider"></div>
+
+                        <button class="tool-btn" id="createLinkBtn" title="Ajouter un lien"><i class="fa-solid fa-link"></i></button>
+                        <button class="tool-btn" data-command="unlink" title="Supprimer le lien"><i class="fa-solid fa-unlink"></i></button>
+                        
+                        <button class="tool-btn" id="insertImageUrlBtn" title="Image par URL"><i class="fa-solid fa-image"></i></button>
+                        <label class="tool-btn" title="Téléverser l'image principale (placée en haut)">
+                            <i class="fa-solid fa-upload"></i>
+                            <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+                        </label>
+                        <button class="tool-btn" id="insertVideoBtn" title="Insérer une vidéo"><i class="fa-solid fa-video"></i></button>
+
+                        <div class="toolbar-divider"></div>
+
+                        <button class="tool-btn" data-command="insertUnorderedList" title="Liste à puces"><i class="fa-solid fa-list-ul"></i></button>
+                        <button class="tool-btn" data-command="insertNumberedList" title="Liste numérotée"><i class="fa-solid fa-list-ol"></i></button>
+                        <button class="tool-btn" data-command="justifyLeft" title="Aligner à gauche"><i class="fa-solid fa-align-left"></i></button>
+                        <button class="tool-btn" data-command="justifyCenter" title="Centrer"><i class="fa-solid fa-align-center"></i></button>
+                        <button class="tool-btn" data-command="justifyRight" title="Aligner à droite"><i class="fa-solid fa-align-right"></i></button>
+                        <button class="tool-btn" data-command="justifyFull" title="Justifier"><i class="fa-solid fa-align-justify"></i></button>
+
+                        <div class="toolbar-divider"></div>
+
+                        <button class="tool-btn" id="insertBlockquoteBtn" title="Citation"><i class="fa-solid fa-quote-left"></i></button>
+                        <button class="tool-btn" id="insertReadMoreBtn" title="Saut de page Blogger"><i class="fa-solid fa-scissors"></i></button>
+                        <button class="tool-btn" data-command="outdent" title="Diminuer le retrait"><i class="fa-solid fa-outdent"></i></button>
+                        <button class="tool-btn" data-command="indent" title="Augmenter le retrait"><i class="fa-solid fa-indent"></i></button>
+
+                        <div class="toolbar-divider"></div>
+
+                        <button class="tool-btn" id="dirLtrBtn" title="De gauche à droite (LTR)"><i class="fa-solid fa-paragraph"></i> L</button>
+                        <button class="tool-btn" id="dirRtlBtn" title="De droite à gauche (RTL)"><i class="fa-solid fa-paragraph"></i> R</button>
+                        <button class="tool-btn" data-command="removeFormat" title="Effacer le formatage"><i class="fa-solid fa-eraser"></i></button>
+                    </div>
+                </div>
+
+                <!-- Zone d'édition -->
+                <div class="editor-container">
+                    <div id="visualEditor" contenteditable="true" placeholder="Commencez à rédiger votre article ici..."></div>
+                    <textarea id="codeEditor" spellcheck="false" placeholder="Le code HTML brut apparaîtra ici..."></textarea>
+                </div>
             </div>
-        </div>
-
-        <!-- Zone d'édition (50% centrée sur PC, plein écran sur Android) -->
-        <div class="editor-container">
-            <div id="visualEditor" contenteditable="true" placeholder="Commencez à rédiger votre article ici..."></div>
-            <textarea id="codeEditor" spellcheck="false" placeholder="Le code HTML brut apparaîtra ici..."></textarea>
         </div>
 
         <!-- Pied de page -->
@@ -689,7 +993,7 @@
 
     <!-- Logique JavaScript intégrée -->
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB59BOGny0ZCcDT5oNz7zSjk5HygOLat1Xyc-oIi_HdTaLO4BR8cM1oqdehJ7h_YFlMA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsG_ZdMoNURMi17ATB_qS9qR_N0Jc5eh98Z8xwcI_qISHsR8SJgBewHHy2XFXIlfE38g/exec";
 
         // Éléments UI principaux
         const visualEditor = document.getElementById('visualEditor');
@@ -714,7 +1018,7 @@
         const publishToggleBtn = document.getElementById('publishToggleBtn');
         const publishStatusText = document.getElementById('publishStatusText');
 
-        // Outils
+        // Outils Toolbar
         const formatBlockSelect = document.getElementById('formatBlockSelect');
         const fontNameSelect = document.getElementById('fontNameSelect');
         const fontSizeSelect = document.getElementById('fontSizeSelect');
@@ -729,11 +1033,162 @@
         const dirLtrBtn = document.getElementById('dirLtrBtn');
         const dirRtlBtn = document.getElementById('dirRtlBtn');
 
+        // Éléments du Panneau de Statistiques
+        const statsSidebar = document.getElementById('statsSidebar');
+        const toggleStatsSidebarBtn = document.getElementById('toggleStatsSidebarBtn');
+        const closeStatsSidebarBtn = document.getElementById('closeStatsSidebarBtn');
+        const refreshStatsBtn = document.getElementById('refreshStatsBtn');
+        const statTotalViews = document.getElementById('statTotalViews');
+        const statTotalLikes = document.getElementById('statTotalLikes');
+        const statTotalItems = document.getElementById('statTotalItems');
+        const statTotalProfiles = document.getElementById('statTotalProfiles');
+        const statsPagesContainer = document.getElementById('statsPagesContainer');
+        const statsPagesCount = document.getElementById('statsPagesCount');
+        const statsDevicesContainer = document.getElementById('statsDevicesContainer');
+        const statsCountriesContainer = document.getElementById('statsCountriesContainer');
+        const statsActivityFeed = document.getElementById('statsActivityFeed');
+
         let isCodeMode = false;
         let currentRecordId = null;
         let latestUploadedImage = "";
         let isPublished = true;
 
+        /* ========================================================
+           GESTION DU VOLET LATÉRAL DE STATISTIQUES (BORD GAUCHE)
+           ======================================================== */
+        function toggleStatsSidebar() {
+            statsSidebar.classList.toggle('collapsed');
+        }
+
+        toggleStatsSidebarBtn.addEventListener('click', toggleStatsSidebar);
+        closeStatsSidebarBtn.addEventListener('click', toggleStatsSidebar);
+        refreshStatsBtn.addEventListener('click', () => {
+            fetchAndRenderStatistics();
+            showToast("📊 Statistiques actualisées !");
+        });
+
+        async function fetchAndRenderStatistics() {
+            refreshStatsBtn.querySelector('i').classList.add('fa-spin');
+            
+            try {
+                // 1. Récupération des données globales
+                const [seriesRes, profRes, statsRes] = await Promise.allSettled([
+                    fetch(`${SCRIPT_URL}?action=getSeries`).then(r => r.json()),
+                    fetch(`${SCRIPT_URL}?action=getProfiles`).then(r => r.json()),
+                    fetch(`${SCRIPT_URL}?action=getStats`).then(r => r.json())
+                ]);
+
+                let totalSeries = 0;
+                let totalEpisodes = 0;
+                let totalLikes = 0;
+                let totalProfiles = 0;
+                let rawStats = [];
+
+                if (seriesRes.status === 'fulfilled' && seriesRes.value.status === 'success') {
+                    const seriesData = seriesRes.value.data || [];
+                    totalSeries = seriesData.length;
+                    seriesData.forEach(s => {
+                        totalLikes += Number(s.likes) || 0;
+                    });
+                }
+
+                if (profRes.status === 'fulfilled' && profRes.value.status === 'success') {
+                    totalProfiles = (profRes.value.data || []).length;
+                }
+
+                if (statsRes.status === 'fulfilled' && statsRes.value.status === 'success') {
+                    rawStats = statsRes.value.data || [];
+                }
+
+                // 2. Calcul des vues et des interactions
+                const totalViews = rawStats.length;
+                statTotalViews.textContent = totalViews;
+                statTotalLikes.textContent = totalLikes;
+                statTotalItems.textContent = `${totalSeries} séries`;
+                statTotalProfiles.textContent = totalProfiles;
+
+                // 3. Agrégation par Page / Tab
+                const tabCounts = {};
+                const deviceCounts = {};
+                const countryCounts = {};
+
+                rawStats.forEach(st => {
+                    // Page / Tab
+                    let tabName = st.eventType || 'Vue';
+                    if (st.targetTitle) tabName += ` (${st.targetTitle})`;
+                    tabCounts[tabName] = (tabCounts[tabName] || 0) + 1;
+
+                    // Appareil
+                    let dev = st.device || 'Inconnu';
+                    if (st.os) dev += ` • ${st.os}`;
+                    deviceCounts[dev] = (deviceCounts[dev] || 0) + 1;
+
+                    // Pays
+                    let pays = st.pays || 'Inconnu';
+                    countryCounts[pays] = (countryCounts[pays] || 0) + 1;
+                });
+
+                // Rendu des Pages & Onglets
+                renderStatBarSection(statsPagesContainer, tabCounts, totalViews);
+                statsPagesCount.textContent = `${totalViews} événements`;
+
+                // Rendu des Appareils
+                renderStatBarSection(statsDevicesContainer, deviceCounts, totalViews);
+
+                // Rendu des Pays
+                renderStatBarSection(statsCountriesContainer, countryCounts, totalViews);
+
+                // Rendu du flux d'activité en direct (15 derniers)
+                if (rawStats.length > 0) {
+                    statsActivityFeed.innerHTML = '';
+                    rawStats.slice(0, 15).forEach(act => {
+                        const item = document.createElement('div');
+                        item.className = 'activity-item';
+                        item.innerHTML = `
+                            <div class="activity-item-time"><i class="fa-regular fa-clock"></i> ${act.date} • <b>${act.pays}</b></div>
+                            <div class="activity-item-desc">${act.eventType} ${act.targetTitle ? '— ' + act.targetTitle : ''}</div>
+                        `;
+                        statsActivityFeed.appendChild(item);
+                    });
+                } else {
+                    statsActivityFeed.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Aucune visite enregistrée pour le moment</div>';
+                }
+
+            } catch (err) {
+                console.error("Erreur de chargement des statistiques:", err);
+            } finally {
+                refreshStatsBtn.querySelector('i').classList.remove('fa-spin');
+            }
+        }
+
+        function renderStatBarSection(container, dataObj, total) {
+            container.innerHTML = '';
+            const entries = Object.entries(dataObj).sort((a, b) => b[1] - a[1]);
+            if (entries.length === 0) {
+                container.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 6px;">Pas de données</div>';
+                return;
+            }
+
+            entries.slice(0, 5).forEach(([label, count]) => {
+                const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                const row = document.createElement('div');
+                row.className = 'stat-bar-item';
+                row.innerHTML = `
+                    <div class="stat-bar-label">
+                        <span title="${label}">${label.length > 24 ? label.substring(0, 24) + '...' : label}</span>
+                        <span>${count} (${percent}%)</span>
+                    </div>
+                    <div class="stat-bar-track">
+                        <div class="stat-bar-fill" style="width: ${percent}%;"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        /* ========================================================
+           FONCTIONNALITÉS EXISTANTES PRÉSERVÉES À 100%
+           ======================================================== */
         function showToast(message) {
             toast.textContent = message;
             toast.classList.add('show');
@@ -1030,6 +1485,8 @@
                     } else {
                         await loadEpisodes(seriesId);
                     }
+                    // Actualisation des statistiques après chaque sauvegarde
+                    fetchAndRenderStatistics();
                 } else {
                     showToast("❌ Erreur : " + result.message);
                 }
@@ -1106,7 +1563,7 @@
             if (isCodeMode) return;
             let url = prompt('Entrez l\'URL YouTube ou le code Iframe :');
             if (url) {
-                if (url.includes('youtube.com/watch?v=' || url.includes('youtu.be/'))) {
+                if (url.includes('youtube.com/watch?v=') || url.includes('youtu.be/')) {
                     const videoId = url.includes('youtu.be/') ? url.split('youtu.be/')[1].split('?')[0] : url.split('v=')[1].split('&')[0];
                     url = `<iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
                 }
@@ -1214,6 +1671,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             updateStats();
             loadSeries();
+            fetchAndRenderStatistics();
         });
     </script>
 </body>
